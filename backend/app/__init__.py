@@ -1,0 +1,1 @@
+"""FazOEco backend application package."""
