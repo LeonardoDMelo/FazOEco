@@ -67,7 +67,7 @@ npm run dev
 
 ## Fase atual
 
-**Fase 3** — Motor de preços/faixas, ranking de qualidade (0–100) e deduplicação GTIN/EAN.
+**Fase 4** — Conectores Amazon / Mercado Livre / Shopee com modo simulação (`ENABLE_SIMULATION_MODE`).
 
 ### Domínio (tabelas)
 

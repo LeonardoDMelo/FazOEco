@@ -15,6 +15,7 @@ class Settings(BaseSettings):
         env_file=(".env", "../.env"),
         env_file_encoding="utf-8",
         extra="ignore",
+        populate_by_name=True,
     )
 
     app_name: str = Field(default="FazOEco", alias="APP_NAME")
@@ -38,6 +39,25 @@ class Settings(BaseSettings):
         default="America/Sao_Paulo",
         alias="DISPLAY_TIMEZONE",
     )
+
+    # --- Connectors / simulation ---
+    enable_simulation_mode: bool = Field(default=True, alias="ENABLE_SIMULATION_MODE")
+
+    amazon_access_key: str | None = Field(default=None, alias="AMAZON_ACCESS_KEY")
+    amazon_secret_key: str | None = Field(default=None, alias="AMAZON_SECRET_KEY")
+    amazon_partner_tag: str | None = Field(default=None, alias="AMAZON_PARTNER_TAG")
+
+    mercadolivre_site_id: str = Field(default="MLB", alias="MERCADOLIVRE_SITE_ID")
+    mercadolivre_access_token: str | None = Field(
+        default=None, alias="MERCADOLIVRE_ACCESS_TOKEN"
+    )
+    mercadolivre_affiliate_id: str | None = Field(
+        default=None, alias="MERCADOLIVRE_AFFILIATE_ID"
+    )
+
+    shopee_partner_id: str | None = Field(default=None, alias="SHOPEE_PARTNER_ID")
+    shopee_partner_key: str | None = Field(default=None, alias="SHOPEE_PARTNER_KEY")
+    shopee_shop_id: str | None = Field(default=None, alias="SHOPEE_SHOP_ID")
 
     @field_validator("backend_cors_origins", mode="before")
     @classmethod
