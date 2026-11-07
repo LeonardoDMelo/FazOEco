@@ -67,4 +67,10 @@ npm run dev
 
 ## Fase atual
 
-**Fase 1** — Estrutura base, configuração do ambiente e banco de dados.
+**Fase 2** — Modelagem PostgreSQL (SQLAlchemy 2.0 async), schemas Pydantic v2 e migração inicial Alembic.
+
+### Domínio (tabelas)
+
+`users` · `categories` · `products` · `offers` · `price_history` · `logs` · `settings`
+
+Timestamps persistem em **UTC**; schemas de leitura convertem para **America/Sao_Paulo**.

@@ -34,6 +34,10 @@ class Settings(BaseSettings):
         alias="BACKEND_CORS_ORIGINS",
     )
     secret_key: str = Field(default="change-me", alias="SECRET_KEY")
+    display_timezone: str = Field(
+        default="America/Sao_Paulo",
+        alias="DISPLAY_TIMEZONE",
+    )
 
     @field_validator("backend_cors_origins", mode="before")
     @classmethod
