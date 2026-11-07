@@ -67,10 +67,22 @@ npm run dev
 
 ## Fase atual
 
-**Fase 2** — Modelagem PostgreSQL (SQLAlchemy 2.0 async), schemas Pydantic v2 e migração inicial Alembic.
+**Fase 3** — Motor de preços/faixas, ranking de qualidade (0–100) e deduplicação GTIN/EAN.
 
 ### Domínio (tabelas)
 
 `users` · `categories` · `products` · `offers` · `price_history` · `logs` · `settings`
 
 Timestamps persistem em **UTC**; schemas de leitura convertem para **America/Sao_Paulo**.
+
+### Serviços de negócio
+
+| Serviço | Responsabilidade |
+|---------|------------------|
+| `PricingService` | Desconto `Decimal`, faixas dinâmicas e critérios de publicação |
+| `RankingService` | Score 0–100 em 5 pilares com redistribuição transparente |
+| `DeduplicationService` | Match por GTIN/EAN e atualização de ofertas existentes |
+
+```bash
+docker compose exec backend pytest -q
+```
