@@ -1,0 +1,14 @@
+---
+description: Sempre commitar e fazer push após alterações no projeto
+alwaysApply: true
+---
+
+# Auto commit e push
+
+Após concluir alterações solicitadas pelo usuário neste repositório:
+
+1. Faça commit das mudanças relevantes (nunca inclua `.env` ou secrets).
+2. Em seguida, faça `git push` para `origin` na branch atual.
+3. Não peça confirmação extra para o push — o usuário autorizou push contínuo.
+4. Se o commit falhar ou não houver mudanças, não faça push vazio.
+5. Informe a URL do repositório ou o hash do commit de forma breve ao final.
