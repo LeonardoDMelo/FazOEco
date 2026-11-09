@@ -27,7 +27,7 @@ export function AdminSidebar() {
     <aside className="flex w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950 text-slate-200">
       <div className="border-b border-slate-800 px-5 py-5">
         <BrandMark href="/admin" tone="light" size="sm" />
-        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-emerald-400">
+        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-accent-300">
           Painel Admin
         </p>
       </div>
@@ -53,7 +53,7 @@ export function AdminSidebar() {
         })}
       </nav>
       <div className="border-t border-slate-800 p-4 text-xs text-slate-500">
-        <Link href="/" className="hover:text-emerald-400">
+        <Link href="/" className="hover:text-accent-300">
           ← Voltar ao site público
         </Link>
       </div>

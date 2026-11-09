@@ -13,8 +13,8 @@ export function MetricCard({
 }) {
   const tones = {
     default: "border-slate-200",
-    success: "border-emerald-200 bg-emerald-50/50",
-    warning: "border-amber-200 bg-amber-50/50",
+    success: "border-brand-200 bg-brand-50/60",
+    warning: "border-accent-200 bg-accent-50/70",
     danger: "border-rose-200 bg-rose-50/50",
   };
 

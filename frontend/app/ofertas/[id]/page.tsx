@@ -84,11 +84,11 @@ export default async function OfferDetailPage({ params }: Props) {
       </div>
 
       {expired && (
-        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-4 text-amber-950">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-accent-300 bg-accent-50 px-4 py-4 text-accent-950">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
           <div>
             <p className="font-semibold">Esta oferta foi encerrada</p>
-            <p className="mt-1 text-sm text-amber-900/90">
+            <p className="mt-1 text-sm text-accent-900/90">
               O preço ou a disponibilidade mudaram na loja. Mantemos a página
               para referência e sugerimos alternativas da mesma categoria abaixo.
             </p>
@@ -124,7 +124,7 @@ export default async function OfferDetailPage({ params }: Props) {
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
             <span className="inline-flex items-center gap-1">
-              <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+              <Star className="h-4 w-4 fill-accent-400 text-accent-500" />
               Nota {formatRating(offer.average_rating)} ({offer.ratings_count} avaliações)
             </span>
             <span>{offer.sales_count} vendas sinalizadas</span>
@@ -159,8 +159,8 @@ export default async function OfferDetailPage({ params }: Props) {
             </Button>
           )}
 
-          <div className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="flex items-start gap-2 rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-900">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent-600" />
             <p>
               Link de afiliado: a Echonomiza pode receber comissão se você comprar
               nesta loja. O preço final é definido pelo marketplace.

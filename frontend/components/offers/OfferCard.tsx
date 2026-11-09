@@ -38,8 +38,8 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div className="flex items-center justify-between gap-2">
           <Badge variant="neutral">{offer.store_name}</Badge>
-          <span className="inline-flex items-center gap-1 text-xs text-amber-600">
-            <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+          <span className="inline-flex items-center gap-1 text-xs text-accent-600">
+            <Star className="h-3.5 w-3.5 fill-accent-400 text-accent-500" />
             Ranking {formatRating(rating)}
           </span>
         </div>

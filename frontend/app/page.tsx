@@ -35,27 +35,27 @@ export default async function HomePage() {
       <section className="relative overflow-hidden border-b border-brand-900/10">
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(135deg,#052e16_0%,#14532d_45%,#0f766e_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(135deg,#172554_0%,#1e3a8a_42%,#2563eb_100%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.25),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(134,239,172,0.2),transparent_30%)]"
+          className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_18%_20%,rgba(250,204,21,0.22),transparent_32%),radial-gradient(circle_at_85%_8%,rgba(147,197,253,0.28),transparent_28%)]"
         />
         <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-4 py-20 text-white">
-          <p className="animate-fade-up text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">
+          <p className="animate-fade-up text-sm font-semibold uppercase tracking-[0.18em] text-accent-300">
             Portal de ofertas inteligentes
           </p>
           <h1 className="animate-fade-up-delay mt-4">
             <BrandMark tone="light" size="lg" />
           </h1>
-          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-lg leading-relaxed text-emerald-50/90">
+          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-lg leading-relaxed text-blue-50/90">
             Descontos reais, ranking de qualidade e links de afiliados com
             transparência — para você clicar com confiança.
           </p>
           <div className="animate-fade-up-delay-2 mt-8 flex flex-wrap gap-3">
             <Button
               href="/busca?sort=discount_desc"
-              className="bg-white text-brand-800 hover:bg-emerald-50"
+              className="bg-accent-400 text-brand-950 hover:bg-accent-300"
             >
               Ver ofertas em alta
               <ArrowRight className="h-4 w-4" />
@@ -63,7 +63,7 @@ export default async function HomePage() {
             <Button
               href="/transparencia"
               variant="secondary"
-              className="border-white/30 bg-transparent text-white hover:border-white hover:bg-white/10"
+              className="border-white/35 bg-transparent text-white hover:border-accent-300 hover:bg-white/10"
             >
               Como funcionam os afiliados
             </Button>

@@ -5,12 +5,12 @@ type Variant = "primary" | "secondary" | "ghost" | "store";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/20",
+    "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/25",
   secondary:
     "border border-slate-300 bg-white text-slate-800 hover:border-brand-500 hover:text-brand-700",
   ghost: "text-slate-700 hover:bg-slate-100",
   store:
-    "bg-slate-900 text-white hover:bg-slate-800 w-full justify-center",
+    "bg-brand-950 text-white hover:bg-brand-900 w-full justify-center",
 };
 
 export function Button({
