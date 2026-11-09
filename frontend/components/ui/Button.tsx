@@ -4,13 +4,15 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "ghost" | "store";
 
 const variants: Record<Variant, string> = {
+  // Laranja enérgico — CTAs principais
   primary:
-    "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/25",
+    "bg-accent-500 text-white hover:bg-accent-600 shadow-sm shadow-accent-500/30",
   secondary:
-    "border border-slate-300 bg-white text-slate-800 hover:border-brand-500 hover:text-brand-700",
-  ghost: "text-slate-700 hover:bg-slate-100",
+    "border border-neutral-300 bg-white text-neutral-900 hover:border-brand-700 hover:text-brand-800",
+  ghost: "text-neutral-800 hover:bg-neutral-100",
+  // CTA de loja / cupom
   store:
-    "bg-brand-950 text-white hover:bg-brand-900 w-full justify-center",
+    "bg-accent-500 text-white hover:bg-accent-600 shadow-sm shadow-accent-500/25 w-full justify-center",
 };
 
 export function Button({
@@ -30,7 +32,7 @@ export function Button({
   type?: "button" | "submit";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const classes = cn(
-    "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600",
+    "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500",
     variants[variant],
     className,
   );

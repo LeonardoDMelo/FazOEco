@@ -39,12 +39,12 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
         <div className="flex items-center justify-between gap-2">
           <Badge variant="neutral">{offer.store_name}</Badge>
           <span className="inline-flex items-center gap-1 text-xs text-accent-600">
-            <Star className="h-3.5 w-3.5 fill-accent-400 text-accent-500" />
+            <Star className="h-3.5 w-3.5 fill-accent-500 text-accent-500" />
             Ranking {formatRating(rating)}
           </span>
         </div>
 
-        <Link href={`/ofertas/${offer.id}`} className="line-clamp-2 text-base font-semibold text-slate-900 hover:text-brand-700">
+        <Link href={`/ofertas/${offer.id}`} className="line-clamp-2 text-base font-semibold text-neutral-950 hover:text-accent-600">
           {offer.product_name}
         </Link>
 
@@ -63,7 +63,7 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
         </div>
 
         <Button href={offer.affiliate_url} external variant="store">
-          Ver na {offer.store_name}
+          Ir para a loja
           <ExternalLink className="h-4 w-4" />
         </Button>
       </div>

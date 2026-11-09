@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 type BadgeVariant = "brand" | "discount" | "neutral" | "warning";
 
 const variants: Record<BadgeVariant, string> = {
-  brand: "bg-brand-100 text-brand-700",
-  discount: "bg-accent-400 text-brand-950",
-  neutral: "bg-slate-100 text-slate-700",
+  brand: "bg-brand-100 text-brand-800",
+  discount: "bg-accent-500 text-white",
+  neutral: "bg-neutral-100 text-neutral-700",
   warning: "bg-accent-100 text-accent-800",
 };
 
