@@ -35,7 +35,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden border-b border-brand-700 bg-white">
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(135deg,#ac2241_0%,#dd2c53_48%,#e35272_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(135deg,#af334e_0%,#e04164_48%,#e66380_100%)]"
         />
         <div
           aria-hidden
