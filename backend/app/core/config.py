@@ -40,6 +40,18 @@ class Settings(BaseSettings):
         default=60 * 24,
         alias="ACCESS_TOKEN_EXPIRE_MINUTES",
     )
+    admin_initial_email: str = Field(
+        default="admin@fazoeeco.local",
+        alias="ADMIN_INITIAL_EMAIL",
+    )
+    admin_initial_password: str = Field(
+        default="Admin123!",
+        alias="ADMIN_INITIAL_PASSWORD",
+    )
+    admin_initial_username: str = Field(
+        default="admin",
+        alias="ADMIN_INITIAL_USERNAME",
+    )
     display_timezone: str = Field(
         default="America/Sao_Paulo",
         alias="DISPLAY_TIMEZONE",

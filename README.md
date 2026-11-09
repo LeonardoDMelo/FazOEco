@@ -72,7 +72,8 @@ npm run dev
 ### Admin
 
 - UI: http://localhost:3000/admin/login
-- Usuário seed local: `admin` / `Admin123!` (superuser)
+- Credenciais via `.env`: `ADMIN_INITIAL_EMAIL` / `ADMIN_INITIAL_PASSWORD` (seed automático no startup)
+- Padrão local: `admin@fazoeeco.local` / `Admin123!`
 - Endpoints: `/api/v1/admin/*` (JWT Bearer)
 
 ### Domínio (tabelas)
