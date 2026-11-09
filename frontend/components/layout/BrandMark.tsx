@@ -22,7 +22,7 @@ export function BrandMark({
   wordmark = true,
 }: BrandMarkProps) {
   const { box, text } = sizes[size];
-  const color = tone === "light" ? "text-white" : "text-brand-950";
+  const color = tone === "light" ? "text-white" : "text-neutral-800";
 
   return (
     <Link href={href} className={`inline-flex items-center gap-3 font-bold tracking-tight ${color}`}>
