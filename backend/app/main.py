@@ -14,9 +14,15 @@ from app.core.config import get_settings
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """Application lifespan hooks (startup / shutdown)."""
     from app.core.bootstrap import ensure_initial_admin
+    from app.scheduler.manager import get_scheduler_manager
 
     await ensure_initial_admin()
-    yield
+    scheduler = get_scheduler_manager()
+    scheduler.start()
+    try:
+        yield
+    finally:
+        scheduler.shutdown()
 
 
 def create_app() -> FastAPI:

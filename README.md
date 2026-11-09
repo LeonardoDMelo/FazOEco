@@ -67,7 +67,7 @@ npm run dev
 
 ## Fase atual
 
-**Fase 7** — Painel administrativo Next.js (`/admin`) com JWT, moderação, conectores, configs e logs.
+**Fase 8** — APScheduler: ingestão periódica, revalidação/expiração e disparo manual de jobs.
 
 ### Admin
 

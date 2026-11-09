@@ -52,6 +52,15 @@ class Settings(BaseSettings):
         default="admin",
         alias="ADMIN_INITIAL_USERNAME",
     )
+
+    scheduler_ingestion_interval_minutes: int = Field(
+        default=60,
+        alias="SCHEDULER_INGESTION_INTERVAL_MINUTES",
+    )
+    scheduler_revalidation_interval_minutes: int = Field(
+        default=15,
+        alias="SCHEDULER_REVALIDATION_INTERVAL_MINUTES",
+    )
     display_timezone: str = Field(
         default="America/Sao_Paulo",
         alias="DISPLAY_TIMEZONE",
