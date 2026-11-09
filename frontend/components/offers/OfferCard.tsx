@@ -18,8 +18,8 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
   const image = offer.product_image_url;
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/80">
-      <Link href={`/ofertas/${offer.id}`} className="relative block aspect-[4/3] bg-slate-100">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-neutral-200/80">
+      <Link href={`/ofertas/${offer.id}`} className="relative block aspect-[4/3] bg-neutral-100">
         <ProductImage
           src={image}
           alt={offer.product_name}
@@ -37,27 +37,27 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div className="flex items-center justify-between gap-2">
-          <Badge variant="neutral">{offer.store_name}</Badge>
-          <span className="inline-flex items-center gap-1 text-xs text-accent-600">
-            <Star className="h-3.5 w-3.5 fill-accent-500 text-accent-500" />
+          <Badge variant="coupon">{offer.store_name}</Badge>
+          <span className="inline-flex items-center gap-1 text-xs text-neutral-600">
+            <Star className="h-3.5 w-3.5 fill-accent-400 text-accent-500" />
             Ranking {formatRating(rating)}
           </span>
         </div>
 
-        <Link href={`/ofertas/${offer.id}`} className="line-clamp-2 text-base font-semibold text-neutral-950 hover:text-accent-600">
+        <Link href={`/ofertas/${offer.id}`} className="line-clamp-2 text-base font-semibold text-neutral-800 hover:text-brand-600">
           {offer.product_name}
         </Link>
 
         <div className="mt-auto">
           {offer.original_price && (
-            <p className="text-sm text-slate-400 line-through">
+            <p className="text-sm text-neutral-400 line-through">
               {formatBRL(offer.original_price)}
             </p>
           )}
-          <p className="text-2xl font-bold tracking-tight text-slate-900">
+          <p className="mt-1 inline-flex rounded-md bg-accent-300 px-2 py-0.5 text-2xl font-bold tracking-tight text-neutral-900">
             {formatBRL(offer.current_price)}
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-neutral-500">
             Atualizado {formatDateTimeSP(offer.created_at)}
           </p>
         </div>
