@@ -27,7 +27,7 @@ export function AdminSidebar() {
     <aside className="flex w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950 text-slate-200">
       <div className="border-b border-slate-800 px-5 py-5">
         <BrandMark href="/admin" tone="light" size="sm" />
-        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-brand-400">
+        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-accent-400">
           Painel Admin
         </p>
       </div>
@@ -42,7 +42,7 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition",
                 active
-                  ? "bg-brand-600 text-white"
+                  ? "bg-accent-500 text-white"
                   : "text-slate-300 hover:bg-slate-900 hover:text-white",
               )}
             >

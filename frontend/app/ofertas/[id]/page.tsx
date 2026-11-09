@@ -133,14 +133,14 @@ export default async function OfferDetailPage({ params }: Props) {
 
           <div>
             {offer.original_price && (
-              <p className="text-base text-neutral-400 line-through">
+              <p className="text-base text-slate-400 line-through">
                 {formatBRL(offer.original_price)}
               </p>
             )}
-            <p className="mt-1 inline-flex rounded-lg bg-accent-300 px-3 py-1 text-4xl font-bold text-neutral-900">
+            <p className="text-4xl font-bold text-slate-900">
               {formatBRL(offer.current_price)}
             </p>
-            <p className="mt-2 text-sm text-neutral-500">
+            <p className="mt-2 text-sm text-slate-500">
               Preço verificado em{" "}
               {formatDateTimeSP(
                 offer.last_checked_at || offer.updated_at || offer.created_at,

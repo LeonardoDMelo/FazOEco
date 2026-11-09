@@ -10,11 +10,11 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-neutral-800 bg-neutral-900 text-neutral-300">
+    <footer className="mt-auto border-t border-brand-800 bg-brand-950 text-white/80">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[1.4fr_1fr]">
         <div>
           <BrandMark href="/" tone="light" />
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-400">
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
             Portal automatizado de ofertas e afiliados. Comparamos preços e
             destacamos descontos reais com transparência.
           </p>
@@ -34,7 +34,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-neutral-500">
+      <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-white/45">
         © {new Date().getFullYear()} Echonomiza. Como afiliados, podemos receber
         comissão por compras realizadas através dos nossos links.
       </div>

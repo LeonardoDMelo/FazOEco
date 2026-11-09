@@ -1,15 +1,12 @@
 import { cn } from "@/lib/utils";
 
-type BadgeVariant = "brand" | "discount" | "neutral" | "warning" | "coupon";
+type BadgeVariant = "brand" | "discount" | "neutral" | "warning";
 
 const variants: Record<BadgeVariant, string> = {
   brand: "bg-brand-100 text-brand-800",
-  // % OFF / destaque de desconto
-  discount: "bg-brand-600 text-white",
+  discount: "bg-accent-500 text-white",
   neutral: "bg-neutral-100 text-neutral-700",
-  warning: "bg-neutral-800 text-white",
-  // Cupom / frete grátis
-  coupon: "bg-accent-300 text-neutral-900",
+  warning: "bg-accent-100 text-accent-800",
 };
 
 export function Badge({
