@@ -42,7 +42,7 @@ export function buildPageMetadata({
       type: "website",
       locale: "pt_BR",
       url,
-      siteName: "FazOEco",
+      siteName: "Echonomiza",
       title,
       description,
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
@@ -60,7 +60,7 @@ export function homeJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "FazOEco",
+    name: "Echonomiza",
     url: siteUrl(),
     description:
       "Portal de ofertas e afiliados com ranking de qualidade e descontos reais.",
@@ -79,7 +79,7 @@ export function categoryJsonLd(category: Category) {
     name: category.name,
     description: category.description || `Ofertas em ${category.name}`,
     url: absoluteUrl(`/categoria/${category.slug}`),
-    isPartOf: { "@type": "WebSite", name: "FazOEco", url: siteUrl() },
+    isPartOf: { "@type": "WebSite", name: "Echonomiza", url: siteUrl() },
   };
 }
 
@@ -139,11 +139,11 @@ export function offerMetaDescription(offer: OfferDetail): string {
   const discount = formatDiscount(offer.discount_percent);
   const price = formatBRL(offer.current_price);
   if (!offer.is_available) {
-    return `Oferta encerrada: ${offer.product_name}. Confira alternativas semelhantes no FazOEco.`;
+    return `Oferta encerrada: ${offer.product_name}. Confira alternativas semelhantes no Echonomiza.`;
   }
   return discount
-    ? `${offer.product_name} por ${price} (${discount}) na ${offer.store_name}. Compare no FazOEco.`
-    : `${offer.product_name} por ${price} na ${offer.store_name}. Compare no FazOEco.`;
+    ? `${offer.product_name} por ${price} (${discount}) na ${offer.store_name}. Compare no Echonomiza.`
+    : `${offer.product_name} por ${price} na ${offer.store_name}. Compare no Echonomiza.`;
 }
 
 export function breadcrumbJsonLd(

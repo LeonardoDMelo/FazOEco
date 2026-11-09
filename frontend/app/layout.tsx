@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
 import { getCategories } from "@/lib/api";
+import { LOGO_SRC } from "@/lib/brand";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -14,18 +15,22 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "FazOEco — Ofertas e Afiliados com Transparência",
-    template: "%s · FazOEco",
+    default: "Echonomiza — Ofertas e Afiliados com Transparência",
+    template: "%s · Echonomiza",
   },
   description:
     "Encontre descontos reais com ranking de qualidade, faixas dinâmicas e links de afiliados transparentes.",
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "FazOEco",
+    siteName: "Echonomiza",
   },
   twitter: {
     card: "summary_large_image",
+  },
+  icons: {
+    icon: LOGO_SRC,
+    apple: LOGO_SRC,
   },
 };
 

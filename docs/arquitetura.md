@@ -1,8 +1,8 @@
-# Arquitetura — FazOEco
+# Arquitetura — Echonomiza
 
 ## Visão geral
 
-O FazOEco é um portal automatizado de ofertas e afiliados composto por:
+A Echonomiza é um portal automatizado de ofertas e afiliados composto por:
 
 | Camada | Tecnologia | Responsabilidade |
 |--------|------------|------------------|

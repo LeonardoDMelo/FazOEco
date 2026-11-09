@@ -30,8 +30,8 @@ export async function generateMetadata({
   const q = searchParams.q?.trim();
   const title = q ? `Busca: ${q}` : "Buscar ofertas";
   const description = q
-    ? `Resultados de ofertas para “${q}” no FazOEco.`
-    : "Filtre ofertas por loja, faixa de desconto, preço e ranking no FazOEco.";
+    ? `Resultados de ofertas para “${q}” no Echonomiza.`
+    : "Filtre ofertas por loja, faixa de desconto, preço e ranking no Echonomiza.";
 
   const params = new URLSearchParams();
   Object.entries(searchParams).forEach(([key, value]) => {
@@ -73,7 +73,7 @@ export default async function SearchPage({
 
   const listName = searchParams.q
     ? `Resultados para ${searchParams.q}`
-    : "Todas as ofertas FazOEco";
+    : "Todas as ofertas Echonomiza";
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">

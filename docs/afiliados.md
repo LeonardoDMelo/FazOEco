@@ -2,7 +2,7 @@
 
 ## Modelo
 
-A FazOEco **não vende produtos**. O portal compara ofertas e redireciona o usuário para marketplaces parceiros através de links de afiliado. Se a compra for concluída na loja, a FazOEco pode receber comissão.
+A Echonomiza **não vende produtos**. O portal compara ofertas e redireciona o usuário para marketplaces parceiros através de links de afiliado. Se a compra for concluída na loja, a Echonomiza pode receber comissão.
 
 ## Fluxo da oferta
 

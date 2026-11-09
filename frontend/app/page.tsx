@@ -5,6 +5,7 @@ import { DiscountTierSection } from "@/components/offers/DiscountTierSection";
 import { OfferGrid } from "@/components/offers/OfferGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ApiStatus } from "@/components/ui/ApiStatus";
+import { BrandMark } from "@/components/layout/BrandMark";
 import { Button } from "@/components/ui/Button";
 import { loadHomeShowcase } from "@/lib/api";
 import { buildPageMetadata, homeJsonLd, itemListJsonLd } from "@/lib/seo";
@@ -14,7 +15,7 @@ export const revalidate = 60;
 export const metadata: Metadata = buildPageMetadata({
   title: "Ofertas e Afiliados com Transparência",
   description:
-    "Compare descontos reais com ranking de qualidade, faixas dinâmicas e links de afiliados transparentes no FazOEco.",
+    "Compare descontos reais com ranking de qualidade, faixas dinâmicas e links de afiliados transparentes no Echonomiza.",
   path: "/",
 });
 
@@ -27,7 +28,7 @@ export default async function HomePage() {
       <JsonLd
         data={[
           homeJsonLd(),
-          itemListJsonLd(highlightOffers, "Destaques do ranking FazOEco"),
+          itemListJsonLd(highlightOffers, "Destaques do ranking Echonomiza"),
         ]}
       />
 
@@ -44,8 +45,8 @@ export default async function HomePage() {
           <p className="animate-fade-up text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">
             Portal de ofertas inteligentes
           </p>
-          <h1 className="animate-fade-up-delay mt-4 max-w-3xl text-5xl font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            FazOEco
+          <h1 className="animate-fade-up-delay mt-4">
+            <BrandMark tone="light" size="lg" />
           </h1>
           <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-lg leading-relaxed text-emerald-50/90">
             Descontos reais, ranking de qualidade e links de afiliados com

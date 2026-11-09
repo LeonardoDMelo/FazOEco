@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { BrandMark } from "@/components/layout/BrandMark";
 import type { Category } from "@/lib/types";
 
 export function Header({ categories = [] }: { categories?: Category[] }) {
@@ -8,9 +9,7 @@ export function Header({ categories = [] }: { categories?: Category[] }) {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:gap-6">
-        <Link href="/" className="shrink-0 text-2xl font-bold tracking-tight text-brand-700">
-          FazOEco
-        </Link>
+        <BrandMark />
 
         <form action="/busca" method="get" className="relative w-full flex-1">
           <Search

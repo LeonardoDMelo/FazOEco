@@ -9,7 +9,7 @@ export default function TermosPage() {
   return (
     <InstitutionalPage eyebrow="Legal" title="Termos de Uso">
       <p>
-        Ao utilizar o FazOEco, você concorda em usar o conteúdo apenas para fins
+        Ao utilizar o Echonomiza, você concorda em usar o conteúdo apenas para fins
         informativos de comparação de ofertas. Não vendemos produtos diretamente.
       </p>
       <p>

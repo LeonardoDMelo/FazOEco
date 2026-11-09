@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/layout/BrandMark";
 
 const links = [
   { href: "/sobre", label: "Sobre" },
@@ -12,7 +13,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-slate-200 bg-slate-900 text-slate-300">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[1.4fr_1fr]">
         <div>
-          <p className="text-2xl font-bold text-white">FazOEco</p>
+          <BrandMark href="/" tone="light" />
           <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-400">
             Portal automatizado de ofertas e afiliados. Comparamos preços e
             destacamos descontos reais com transparência.
@@ -34,7 +35,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-slate-800 px-4 py-4 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} FazOEco. Como afiliados, podemos receber
+        © {new Date().getFullYear()} Echonomiza. Como afiliados, podemos receber
         comissão por compras realizadas através dos nossos links.
       </div>
     </footer>

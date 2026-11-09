@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!offer) {
     return buildPageMetadata({
       title: "Oferta não encontrada",
-      description: "A oferta solicitada não está disponível no FazOEco.",
+      description: "A oferta solicitada não está disponível no Echonomiza.",
       path: `/ofertas/${params.id}`,
       noIndex: true,
     });
@@ -162,7 +162,7 @@ export default async function OfferDetailPage({ params }: Props) {
           <div className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
             <p>
-              Link de afiliado: a FazOEco pode receber comissão se você comprar
+              Link de afiliado: a Echonomiza pode receber comissão se você comprar
               nesta loja. O preço final é definido pelo marketplace.
             </p>
           </div>
@@ -183,7 +183,7 @@ export default async function OfferDetailPage({ params }: Props) {
               Os preços e a disponibilidade podem mudar sem aviso no site da loja.
             </li>
             <li>
-              A FazOEco não vende produtos: redirecionamos para parceiros
+              A Echonomiza não vende produtos: redirecionamos para parceiros
               afiliados.
             </li>
             <li>

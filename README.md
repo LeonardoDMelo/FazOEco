@@ -1,4 +1,4 @@
-# FazOEco — Portal Automatizado de Ofertas e Afiliados
+# Echonomiza — Portal Automatizado de Ofertas e Afiliados
 
 Stack: **Next.js 14+ (App Router)** · **FastAPI** · **PostgreSQL 16** · **Docker Compose**
 

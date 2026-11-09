@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!category) {
     return buildPageMetadata({
       title: "Categoria não encontrada",
-      description: "A categoria solicitada não existe no FazOEco.",
+      description: "A categoria solicitada não existe no Echonomiza.",
       path: `/categoria/${params.slug}`,
       noIndex: true,
     });
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Ofertas em ${category.name}`,
     description:
       category.description ||
-      `Compare as melhores ofertas da categoria ${category.name} no FazOEco.`,
+      `Compare as melhores ofertas da categoria ${category.name} no Echonomiza.`,
     path: `/categoria/${category.slug}`,
   });
 }

@@ -9,6 +9,7 @@ import {
   Settings2,
   Tags,
 } from "lucide-react";
+import { BrandMark } from "@/components/layout/BrandMark";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -25,9 +26,7 @@ export function AdminSidebar() {
   return (
     <aside className="flex w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950 text-slate-200">
       <div className="border-b border-slate-800 px-5 py-5">
-        <Link href="/admin" className="text-xl font-bold text-white">
-          FazOEco
-        </Link>
+        <BrandMark href="/admin" tone="light" size="sm" />
         <p className="mt-1 text-xs uppercase tracking-[0.16em] text-emerald-400">
           Painel Admin
         </p>

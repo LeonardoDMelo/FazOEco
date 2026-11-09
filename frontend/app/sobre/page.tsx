@@ -3,14 +3,14 @@ import { InstitutionalPage } from "@/components/layout/InstitutionalPage";
 
 export const metadata: Metadata = {
   title: "Sobre",
-  description: "Conheça o FazOEco, portal automatizado de ofertas e afiliados.",
+  description: "Conheça o Echonomiza, portal automatizado de ofertas e afiliados.",
 };
 
 export default function SobrePage() {
   return (
-    <InstitutionalPage eyebrow="Institucional" title="Sobre o FazOEco">
+    <InstitutionalPage eyebrow="Institucional" title="Sobre o Echonomiza">
       <p>
-        O FazOEco é um portal automatizado de ofertas e afiliados. Coletamos
+        A Echonomiza é um portal automatizado de ofertas e afiliados. Coletamos
         preços de marketplaces parceiros, calculamos descontos reais e ranqueamos
         produtos com base em qualidade, popularidade e reputação.
       </p>

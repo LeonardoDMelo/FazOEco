@@ -4,14 +4,14 @@ import { InstitutionalPage } from "@/components/layout/InstitutionalPage";
 export const metadata: Metadata = {
   title: "Transparência de Afiliados",
   description:
-    "Como funcionam os links de afiliados do FazOEco e nossa política de comissões.",
+    "Como funcionam os links de afiliados do Echonomiza e nossa política de comissões.",
 };
 
 export default function TransparenciaPage() {
   return (
     <InstitutionalPage eyebrow="Transparência" title="Transparência de Afiliados">
       <p>
-        O FazOEco participa de programas de afiliados de marketplaces. Quando
+        A Echonomiza participa de programas de afiliados de marketplaces. Quando
         você clica em “Ver na loja” e conclui uma compra, podemos receber uma
         comissão — sem aumentar o preço que você paga.
       </p>
