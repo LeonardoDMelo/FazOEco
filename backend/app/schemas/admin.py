@@ -47,6 +47,30 @@ class DiscountBandsUpdate(BaseModel):
     bands: list[dict[str, Any]] = Field(default_factory=list)
 
 
+class SystemSettingsUpdate(BaseModel):
+    auto_publish_enabled: bool = False
+    simulation_mode_preferred: bool = True
+    price_revalidation_hours: int = Field(default=6, ge=1, le=168)
+    connectors_enabled: dict[str, bool] = Field(
+        default_factory=lambda: {
+            "amazon": True,
+            "mercadolivre": True,
+            "shopee": True,
+        }
+    )
+
+
+class AdminStats(BaseModel):
+    offers_approved: int = 0
+    offers_pending: int = 0
+    offers_rejected: int = 0
+    offers_unavailable: int = 0
+    connectors_ready: int = 0
+    connectors_total: int = 0
+    logs_total: int = 0
+    simulation_enabled: bool = True
+
+
 class LogRead(ORMModel):
     id: UUID
     level: str

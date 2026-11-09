@@ -67,7 +67,13 @@ npm run dev
 
 ## Fase atual
 
-**Fase 6** — Front-end público Next.js (App Router): home, busca, categorias, detalhes e páginas institucionais.
+**Fase 7** — Painel administrativo Next.js (`/admin`) com JWT, moderação, conectores, configs e logs.
+
+### Admin
+
+- UI: http://localhost:3000/admin/login
+- Usuário seed local: `admin` / `Admin123!` (superuser)
+- Endpoints: `/api/v1/admin/*` (JWT Bearer)
 
 ### Domínio (tabelas)
 

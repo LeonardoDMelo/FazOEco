@@ -29,6 +29,7 @@ from app.models.log import Log
 from app.models.offer import Offer
 from app.models.setting import Setting
 from app.schemas.admin import (
+    AdminStats,
     ConnectorRunRequest,
     ConnectorRunResponse,
     ConnectorStatus,
@@ -36,6 +37,7 @@ from app.schemas.admin import (
     LogRead,
     RankingWeightsUpdate,
     SettingRead,
+    SystemSettingsUpdate,
 )
 from app.schemas.offer_public import OfferAdminUpdate, OfferListItem
 from app.schemas.pagination import Page
@@ -44,6 +46,18 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 RANKING_SETTING_KEY = "ranking_weights"
 BANDS_SETTING_KEY = "discount_bands"
+SYSTEM_SETTING_KEY = "system_settings"
+
+DEFAULT_SYSTEM_SETTINGS = {
+    "auto_publish_enabled": False,
+    "simulation_mode_preferred": True,
+    "price_revalidation_hours": 6,
+    "connectors_enabled": {
+        "amazon": True,
+        "mercadolivre": True,
+        "shopee": True,
+    },
+}
 
 
 def _connector_map(settings=None):
@@ -55,6 +69,35 @@ def _connector_map(settings=None):
     }
 
 
+@router.get("/stats", response_model=AdminStats)
+async def admin_stats(db: DbSession, _: CurrentAdmin) -> AdminStats:
+    """Métricas operacionais do painel."""
+    from sqlalchemy import func
+
+    settings = get_settings()
+    connectors = _connector_map(settings)
+
+    async def _count(*clauses) -> int:
+        stmt = select(func.count()).select_from(Offer)
+        for clause in clauses:
+            stmt = stmt.where(clause)
+        return int((await db.execute(stmt)).scalar_one())
+
+    logs_total = int((await db.execute(select(func.count()).select_from(Log))).scalar_one())
+    ready = sum(1 for c in connectors.values() if c.has_credentials() or c.simulation_enabled)
+
+    return AdminStats(
+        offers_approved=await _count(Offer.approval_status == "approved"),
+        offers_pending=await _count(Offer.approval_status == "pending"),
+        offers_rejected=await _count(Offer.approval_status == "rejected"),
+        offers_unavailable=await _count(Offer.is_available.is_(False)),
+        connectors_ready=ready,
+        connectors_total=len(connectors),
+        logs_total=logs_total,
+        simulation_enabled=bool(settings.enable_simulation_mode),
+    )
+
+
 @router.get("/offers", response_model=Page[OfferListItem])
 async def admin_list_offers(
     db: DbSession,
@@ -62,6 +105,7 @@ async def admin_list_offers(
     q: str | None = None,
     store: str | None = None,
     approval_status: str | None = Query(default=None),
+    is_available: bool | None = Query(default=None),
     sort: str = Query(default="newest"),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
@@ -74,6 +118,8 @@ async def admin_list_offers(
         store=store,
         approval_status=approval_status,
     )
+    if is_available is not None:
+        stmt = stmt.where(Offer.is_available.is_(is_available))
     stmt = apply_sort(stmt, sort)
     return await paginate_offers(db, stmt, page=page, page_size=page_size)
 
@@ -333,6 +379,46 @@ async def update_discount_bands(
             level="INFO",
             source="admin.settings",
             message="Discount bands updated",
+            context=payload.model_dump(mode="json"),
+            user_id=admin.id,
+        )
+    )
+    await db.commit()
+    await db.refresh(setting)
+    return SettingRead.model_validate(setting)
+
+
+@router.get("/settings/system", response_model=SettingRead)
+async def get_system_settings(db: DbSession, _: CurrentAdmin) -> SettingRead:
+    result = await db.execute(select(Setting).where(Setting.key == SYSTEM_SETTING_KEY))
+    setting = result.scalar_one_or_none()
+    if setting is None:
+        setting = await _upsert_setting(
+            db,
+            key=SYSTEM_SETTING_KEY,
+            value=DEFAULT_SYSTEM_SETTINGS,
+            description="Configurações operacionais do painel (auto-publish, conectores, revalidação)",
+        )
+    return SettingRead.model_validate(setting)
+
+
+@router.put("/settings/system", response_model=SettingRead)
+async def update_system_settings(
+    payload: SystemSettingsUpdate,
+    db: DbSession,
+    admin: CurrentAdmin,
+) -> SettingRead:
+    setting = await _upsert_setting(
+        db,
+        key=SYSTEM_SETTING_KEY,
+        value=payload.model_dump(),
+        description="Configurações operacionais do painel (auto-publish, conectores, revalidação)",
+    )
+    db.add(
+        Log(
+            level="INFO",
+            source="admin.settings",
+            message="System settings updated",
             context=payload.model_dump(mode="json"),
             user_id=admin.id,
         )

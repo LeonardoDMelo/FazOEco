@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import { AffiliateNoticeBar } from "@/components/layout/AffiliateNoticeBar";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { AppShell } from "@/components/layout/AppShell";
 import { getCategories } from "@/lib/api";
 import "./globals.css";
 
@@ -31,10 +29,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${outfit.variable} flex min-h-screen flex-col font-sans antialiased`}>
-        <AffiliateNoticeBar />
-        <Header categories={categories} />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <AppShell categories={categories}>{children}</AppShell>
       </body>
     </html>
   );
