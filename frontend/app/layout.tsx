@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import { AffiliateNoticeBar } from "@/components/layout/AffiliateNoticeBar";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { getCategories } from "@/lib/api";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -9,19 +13,28 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "FazOEco — Portal de Ofertas e Afiliados",
-  description: "Portal automatizado de ofertas e afiliados",
+  title: {
+    default: "FazOEco — Ofertas e Afiliados com Transparência",
+    template: "%s · FazOEco",
+  },
+  description:
+    "Encontre descontos reais com ranking de qualidade, faixas dinâmicas e links de afiliados transparentes.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await getCategories();
+
   return (
     <html lang="pt-BR">
-      <body className={`${outfit.variable} font-sans antialiased`}>
-        {children}
+      <body className={`${outfit.variable} flex min-h-screen flex-col font-sans antialiased`}>
+        <AffiliateNoticeBar />
+        <Header categories={categories} />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );

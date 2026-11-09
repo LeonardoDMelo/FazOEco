@@ -3,13 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
+  --background: #f4f7f5;
   --foreground: #0f172a;
-  --brand: #16a34a;
+  --brand: #15803d;
+  --surface: #ffffff;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(22, 163, 74, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(15, 118, 110, 0.08), transparent),
+    var(--background);
   min-height: 100vh;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.7s ease-out both;
+  }
+
+  .animate-fade-up-delay {
+    animation: fade-up 0.7s ease-out 0.15s both;
+  }
+
+  .animate-fade-up-delay-2 {
+    animation: fade-up 0.7s ease-out 0.3s both;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

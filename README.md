@@ -67,7 +67,7 @@ npm run dev
 
 ## Fase atual
 
-**Fase 5** — API REST pública + painel admin (JWT), ofertas, categorias, conectores e configs.
+**Fase 6** — Front-end público Next.js (App Router): home, busca, categorias, detalhes e páginas institucionais.
 
 ### Domínio (tabelas)
 
