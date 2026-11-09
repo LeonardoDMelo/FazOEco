@@ -10,19 +10,19 @@ module.exports = {
         sans: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
-        // Vermelho vibrante com 20% menos saturação (menos vivo)
+        // Vermelho vibrante — saturação alta
         brand: {
-          50: "#f7f3f4",
-          100: "#f1e9eb",
-          200: "#e5d5d9",
-          300: "#d5bcc2",
-          400: "#c29ea7",
-          500: "#b2858f",
-          600: "#a16a77",
-          700: "#8e5d69",
-          800: "#7e535d",
-          900: "#6d4851",
-          950: "#593a41",
+          50: "#fceef1",
+          100: "#fadfe5",
+          200: "#f5c4cf",
+          300: "#f0a0b2",
+          400: "#e9768f",
+          500: "#e35272",
+          600: "#dd2c53",
+          700: "#c22749",
+          800: "#ac2241",
+          900: "#961e38",
+          950: "#7a182e",
         },
         // Amarelo quente — cupons, frete grátis e preço novo
         accent: {
