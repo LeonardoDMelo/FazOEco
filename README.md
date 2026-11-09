@@ -65,9 +65,28 @@ npm install
 npm run dev
 ```
 
+## Documentação
+
+| Guia | Arquivo |
+|------|---------|
+| Arquitetura | [docs/arquitetura.md](docs/arquitetura.md) |
+| Instalação | [docs/instalacao.md](docs/instalacao.md) |
+| Integrações | [docs/integracoes.md](docs/integracoes.md) |
+| Afiliados | [docs/afiliados.md](docs/afiliados.md) |
+| Segurança | [docs/seguranca.md](docs/seguranca.md) |
+| Implantação VPS | [docs/implantacao.md](docs/implantacao.md) |
+
+## Produção
+
+```bash
+docker compose -f infra/compose.prod.yaml --env-file .env.prod up -d --build
+```
+
+Imagens multi-stage: backend slim (`target: runtime`) e frontend Next.js `standalone` (~120MB).
+
 ## Fase atual
 
-**Fase 9** — SEO dinâmico, JSON-LD (Product/AggregateOffer), sitemap.xml e robots.txt.
+**Fase 10** — Segurança (SSRF, rate limit, headers), Docker de produção, suíte E2E (20 casos) e documentação.
 
 ### Admin
 

@@ -131,10 +131,20 @@ class BaseConnector(ABC):
 
     async def _get_client(self) -> httpx.AsyncClient:
         if self._client is None:
+            from app.services.http_client import assert_url_safe
+
+            # Validate connector base URL once (SSRF allowlist).
+            assert_url_safe(self.base_url.rstrip("/") + "/", resolve_dns=False)
+
+            async def _ssrf_request_hook(request: httpx.Request) -> None:
+                assert_url_safe(str(request.url), resolve_dns=True)
+
             self._client = httpx.AsyncClient(
                 base_url=self.base_url,
                 timeout=self.timeout,
                 headers=self._default_headers(),
+                follow_redirects=False,
+                event_hooks={"request": [_ssrf_request_hook]},
             )
         return self._client
 
@@ -165,6 +175,9 @@ class BaseConnector(ABC):
             )
         except httpx.TimeoutException as exc:
             raise ConnectorError(self.store_name, "request timeout", retriable=True) from exc
+        except ValueError as exc:
+            # SSRFError inherits ValueError — do not retry blocked destinations.
+            raise ConnectorError(self.store_name, f"ssrf blocked: {exc}", retriable=False) from exc
         except httpx.HTTPError as exc:
             raise ConnectorError(self.store_name, f"http error: {exc}", retriable=True) from exc
 

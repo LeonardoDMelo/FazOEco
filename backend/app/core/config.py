@@ -40,6 +40,16 @@ class Settings(BaseSettings):
         default=60 * 24,
         alias="ACCESS_TOKEN_EXPIRE_MINUTES",
     )
+
+    # --- Security / rate limiting / SSRF ---
+    rate_limit_enabled: bool = Field(default=True, alias="RATE_LIMIT_ENABLED")
+    rate_limit_login: str = Field(default="10/minute", alias="RATE_LIMIT_LOGIN")
+    rate_limit_search: str = Field(default="120/minute", alias="RATE_LIMIT_SEARCH")
+    ssrf_allowed_hosts: Annotated[List[str], NoDecode] = Field(
+        default_factory=list,
+        alias="SSRF_ALLOWED_HOSTS",
+    )
+    web_concurrency: int = Field(default=2, alias="WEB_CONCURRENCY")
     admin_initial_email: str = Field(
         default="admin@fazoeeco.local",
         alias="ADMIN_INITIAL_EMAIL",
@@ -85,9 +95,9 @@ class Settings(BaseSettings):
     shopee_partner_key: str | None = Field(default=None, alias="SHOPEE_PARTNER_KEY")
     shopee_shop_id: str | None = Field(default=None, alias="SHOPEE_SHOP_ID")
 
-    @field_validator("backend_cors_origins", mode="before")
+    @field_validator("backend_cors_origins", "ssrf_allowed_hosts", mode="before")
     @classmethod
-    def parse_cors_origins(cls, value: object) -> object:
+    def parse_csv_list(cls, value: object) -> object:
         if isinstance(value, str):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return value

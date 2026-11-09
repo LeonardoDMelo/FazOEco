@@ -2,14 +2,27 @@
 
 from __future__ import annotations
 
+import os
 from decimal import Decimal
 from uuid import uuid4
 
 import pytest
 
+# Keep integration suites stable: rate limits are exercised in test_full_pipeline.
+os.environ.setdefault("RATE_LIMIT_ENABLED", "false")
+
 from app.services.deduplication_service import DeduplicationService, OfferIdentity
 from app.services.pricing_service import PricingConfig, PricingService
 from app.services.ranking_service import RankingConfig, RankingService
+
+
+@pytest.fixture(autouse=True)
+def _clear_settings_cache() -> None:
+    from app.core.config import get_settings
+
+    get_settings.cache_clear()
+    yield
+    get_settings.cache_clear()
 
 
 @pytest.fixture
