@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #1f2937;
-  --brand: #f08ea4;
+  --brand: #a86373;
   --accent: #facc15;
   --surface: #ffffff;
 }
@@ -13,7 +13,7 @@
 body {
   color: var(--foreground);
   background:
-    radial-gradient(ellipse 70% 45% at 0% -5%, rgba(240, 142, 164, 0.08), transparent),
+    radial-gradient(ellipse 70% 45% at 0% -5%, rgba(168, 99, 115, 0.08), transparent),
     radial-gradient(ellipse 50% 35% at 100% 0%, rgba(250, 204, 21, 0.08), transparent),
     var(--background);
   min-height: 100vh;

@@ -32,23 +32,23 @@ export default async function HomePage() {
         ]}
       />
 
-      <section className="relative overflow-hidden border-b border-brand-300 bg-white">
+      <section className="relative overflow-hidden border-b border-brand-700 bg-white">
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(135deg,#cf889c_0%,#f08ea4_48%,#fa9fae_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(135deg,#834d5a_0%,#a86373_48%,#b87f8c_100%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_18%_20%,rgba(250,204,21,0.35),transparent_34%),radial-gradient(circle_at_88%_12%,rgba(255,255,255,0.35),transparent_30%)]"
+          className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_18%_20%,rgba(250,204,21,0.35),transparent_34%),radial-gradient(circle_at_88%_12%,rgba(255,255,255,0.22),transparent_30%)]"
         />
-        <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-4 py-20 text-neutral-900">
+        <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-4 py-20 text-white">
           <p className="animate-fade-up inline-flex w-fit items-center rounded-md bg-accent-300 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.18em] text-neutral-900">
             Ofertas relâmpago
           </p>
           <h1 className="animate-fade-up-delay mt-4">
-            <BrandMark tone="dark" size="lg" />
+            <BrandMark tone="light" size="lg" />
           </h1>
-          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-lg leading-relaxed text-neutral-800">
+          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-lg leading-relaxed text-white/90">
             Descontos reais, ranking de qualidade e links de afiliados com
             transparência — para você clicar com confiança.
           </p>
@@ -63,7 +63,7 @@ export default async function HomePage() {
             <Button
               href="/transparencia"
               variant="secondary"
-              className="border-neutral-800/30 bg-white/50 text-neutral-900 hover:border-neutral-800 hover:bg-white"
+              className="border-white/50 bg-transparent text-white hover:border-accent-300 hover:bg-white/10 hover:text-white"
             >
               Como funcionam os afiliados
             </Button>

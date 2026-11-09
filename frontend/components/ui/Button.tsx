@@ -4,14 +4,14 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "ghost" | "store";
 
 const variants: Record<Variant, string> = {
-  // Vermelho claro — CTAs com texto escuro para contraste
+  // Vermelho — CTAs
   primary:
-    "bg-brand-600 text-neutral-900 hover:bg-brand-700 shadow-sm shadow-brand-600/25",
+    "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/25",
   secondary:
     "border border-neutral-300 bg-white text-neutral-800 hover:border-neutral-500 hover:text-neutral-950",
   ghost: "text-neutral-700 hover:bg-neutral-100",
   store:
-    "bg-brand-600 text-neutral-900 hover:bg-brand-700 shadow-sm shadow-brand-600/20 w-full justify-center",
+    "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/20 w-full justify-center",
 };
 
 export function Button({
