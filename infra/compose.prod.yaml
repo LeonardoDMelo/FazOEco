@@ -41,7 +41,8 @@ services:
       RATE_LIMIT_ENABLED: "true"
       RATE_LIMIT_LOGIN: ${RATE_LIMIT_LOGIN:-10/minute}
       RATE_LIMIT_SEARCH: ${RATE_LIMIT_SEARCH:-120/minute}
-      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
+      # 1 worker on a 2GB VPS: APScheduler lives in-process, so extra workers duplicate jobs.
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
       ADMIN_INITIAL_EMAIL: ${ADMIN_INITIAL_EMAIL}
       ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD}
       ADMIN_INITIAL_USERNAME: ${ADMIN_INITIAL_USERNAME:-admin}

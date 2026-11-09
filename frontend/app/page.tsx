@@ -42,8 +42,9 @@ export default async function HomePage() {
     getOffers({ sort: "ranking_desc", page_size: 8 }),
     loadTier(),
   ]);
-  const featured = await getFeaturedOffers("high", 4);
-  const highlightOffers = ranking.items.length ? ranking.items : featured.items;
+  const highlightOffers = ranking.items.length
+    ? ranking.items
+    : (await getFeaturedOffers("high", 4)).items;
 
   return (
     <>

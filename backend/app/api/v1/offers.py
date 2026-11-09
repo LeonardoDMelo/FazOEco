@@ -28,8 +28,8 @@ router = APIRouter(tags=["offers"])
 @router.get("/offers", response_model=Page[OfferListItem])
 async def list_offers(
     db: DbSession,
-    q: str | None = Query(default=None, description="Busca por nome ou loja"),
-    store: str | None = None,
+    q: str | None = Query(default=None, max_length=120, description="Busca por nome ou loja"),
+    store: str | None = Query(default=None, max_length=80),
     category_id: UUID | None = None,
     band: str | None = Query(
         default=None,

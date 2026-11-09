@@ -24,6 +24,11 @@ SORT_MAP = {
 pricing = PricingService()
 
 
+def escape_like(value: str) -> str:
+    """Escape ``%``, ``_`` and backslash so user input is a literal ILIKE term."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def offer_to_list_item(offer: Offer) -> OfferListItem:
     product = offer.product
     discount = offer.discount_percent
@@ -33,7 +38,7 @@ def offer_to_list_item(offer: Offer) -> OfferListItem:
         product_id=offer.product_id,
         product_name=product.name,
         product_slug=product.slug,
-        product_image_url=product.image_url or offer.product.image_url,
+        product_image_url=product.image_url,
         ranking_score=product.ranking_score,
         store_name=offer.store_name,
         affiliate_network=offer.affiliate_network,
@@ -77,10 +82,15 @@ def apply_offer_filters(
     approval_status: str | None = None,
 ) -> Select[tuple[Offer]]:
     if q:
-        like = f"%{q.strip()}%"
-        stmt = stmt.where(or_(Product.name.ilike(like), Offer.store_name.ilike(like)))
+        like = f"%{escape_like(q.strip())}%"
+        stmt = stmt.where(
+            or_(
+                Product.name.ilike(like, escape="\\"),
+                Offer.store_name.ilike(like, escape="\\"),
+            )
+        )
     if store:
-        stmt = stmt.where(Offer.store_name.ilike(store.strip()))
+        stmt = stmt.where(Offer.store_name.ilike(escape_like(store.strip()), escape="\\"))
     if category_id:
         stmt = stmt.where(Product.category_id == category_id)
     if approval_status:

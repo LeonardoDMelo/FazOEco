@@ -127,6 +127,15 @@ class InMemoryRateLimiter:
                 retry_after = max(1, int(window_seconds - (now - bucket[0])) + 1)
                 return False, retry_after
             bucket.append(now)
+            if len(self._events) > 5000:
+                cutoff = now - 3600
+                stale = [
+                    key
+                    for key, events in self._events.items()
+                    if not events or events[-1] < cutoff
+                ]
+                for stale_key in stale:
+                    self._events.pop(stale_key, None)
             return True, 0
 
     def reset(self) -> None:
