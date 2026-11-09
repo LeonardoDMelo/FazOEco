@@ -1,11 +1,22 @@
 import type {
   Category,
+  DiscountBand,
   OfferDetail,
   OfferFilters,
   OfferListItem,
   Page,
   ProductDetail,
 } from "./types";
+
+export type LoadResult<T> = {
+  data: T;
+  unavailable: boolean;
+};
+
+export type HomeShowcase = {
+  ranking: OfferListItem[];
+  tiers: Partial<Record<DiscountBand, OfferListItem[]>>;
+};
 
 function apiBase(): string {
   if (typeof window === "undefined") {
@@ -63,13 +74,36 @@ const emptyPage = <T,>(): Page<T> => ({
   meta: { page: 1, page_size: 20, total: 0, pages: 0 },
 });
 
+export async function loadOffers(
+  filters: OfferFilters = {},
+): Promise<LoadResult<Page<OfferListItem>>> {
+  try {
+    return {
+      data: await apiFetch<Page<OfferListItem>>(`/api/v1/offers${toQuery(filters)}`),
+      unavailable: false,
+    };
+  } catch {
+    return { data: emptyPage(), unavailable: true };
+  }
+}
+
 export async function getOffers(
   filters: OfferFilters = {},
 ): Promise<Page<OfferListItem>> {
+  return (await loadOffers(filters)).data;
+}
+
+export async function loadHomeShowcase(): Promise<LoadResult<HomeShowcase>> {
   try {
-    return await apiFetch<Page<OfferListItem>>(`/api/v1/offers${toQuery(filters)}`);
+    return {
+      data: await apiFetch<HomeShowcase>("/api/v1/offers/home"),
+      unavailable: false,
+    };
   } catch {
-    return emptyPage();
+    return {
+      data: { ranking: [], tiers: {} },
+      unavailable: true,
+    };
   }
 }
 
@@ -123,10 +157,22 @@ export async function getCategories(): Promise<Category[]> {
   }
 }
 
-export async function getCategory(slug: string): Promise<Category | null> {
+export async function loadCategory(
+  slug: string,
+): Promise<LoadResult<Category | null>> {
   try {
-    return await apiFetch<Category>(`/api/v1/categories/${slug}`);
-  } catch {
-    return null;
+    return {
+      data: await apiFetch<Category>(`/api/v1/categories/${encodeURIComponent(slug)}`),
+      unavailable: false,
+    };
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      return { data: null, unavailable: false };
+    }
+    return { data: null, unavailable: true };
   }
+}
+
+export async function getCategory(slug: string): Promise<Category | null> {
+  return (await loadCategory(slug)).data;
 }

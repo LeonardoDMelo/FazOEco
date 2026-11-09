@@ -175,7 +175,12 @@ async def test_health(api_ctx) -> None:
 @pytest.mark.asyncio
 async def test_login_and_me(api_ctx) -> None:
     client, data = api_ctx
-    token = await _login(client, data["admin_username"], data["admin_password"])
+    response = await client.post(
+        "/api/v1/auth/login",
+        data={"username": data["admin_username"], "password": data["admin_password"]},
+    )
+    assert response.status_code == 200, response.text
+    token = response.json()["access_token"]
     me = await client.get(
         "/api/v1/auth/me",
         headers={"Authorization": f"Bearer {token}"},
@@ -184,6 +189,15 @@ async def test_login_and_me(api_ctx) -> None:
     body = me.json()
     assert body["username"] == data["admin_username"]
     assert body["is_superuser"] is True
+    set_cookie = response.headers.get("set-cookie", "")
+    assert "fazoeeco_admin_token=" in set_cookie
+    assert "httponly" in set_cookie.lower()
+
+    cookie_me = await client.get(
+        "/api/v1/auth/me",
+        cookies={"fazoeeco_admin_token": token},
+    )
+    assert cookie_me.status_code == 200
 
 
 @pytest.mark.asyncio
@@ -209,6 +223,16 @@ async def test_public_list_offers_hides_pending(api_ctx) -> None:
     assert data["approved_offer_id"] in ids
     assert data["pending_offer_id"] not in ids
     assert body["meta"]["total"] >= 1
+
+
+@pytest.mark.asyncio
+async def test_home_showcase(api_ctx) -> None:
+    client, _ = api_ctx
+    response = await client.get("/api/v1/offers/home")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body["ranking"], list)
+    assert set(body["tiers"]) == {"extreme", "high", "medium"}
 
 
 @pytest.mark.asyncio

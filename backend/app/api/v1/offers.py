@@ -19,7 +19,7 @@ from app.api.v1.helpers import (
 )
 from app.models.offer import Offer
 from app.models.product import Product
-from app.schemas.offer_public import OfferDetail, OfferListItem, ProductDetail
+from app.schemas.offer_public import HomeShowcase, OfferDetail, OfferListItem, ProductDetail
 from app.schemas.pagination import Page
 
 router = APIRouter(tags=["offers"])
@@ -57,6 +57,29 @@ async def list_offers(
     )
     stmt = apply_sort(stmt, sort)
     return await paginate_offers(db, stmt, page=page, page_size=page_size)
+
+
+@router.get("/offers/home", response_model=HomeShowcase)
+async def home_showcase(
+    db: DbSession,
+    ranking_size: int = Query(default=8, ge=1, le=24),
+    tier_size: int = Query(default=4, ge=1, le=12),
+) -> HomeShowcase:
+    """Ranking and discount bands in one round-trip for the public home."""
+
+    async def _slice(sort: str, *, band: str | None, size: int) -> list[OfferListItem]:
+        stmt = base_offer_query(public_only=True)
+        stmt = apply_offer_filters(stmt, band=band)
+        stmt = apply_sort(stmt, sort)
+        page = await paginate_offers(db, stmt, page=1, page_size=size)
+        return page.items
+
+    ranking = await _slice("ranking_desc", band=None, size=ranking_size)
+    tiers = {
+        band: await _slice("discount_desc", band=band, size=tier_size)
+        for band in ("extreme", "high", "medium")
+    }
+    return HomeShowcase(ranking=ranking, tiers=tiers)
 
 
 @router.get("/offers/featured", response_model=Page[OfferListItem])

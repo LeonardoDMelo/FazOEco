@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
@@ -19,6 +20,10 @@ from starlette.types import ASGIApp
 from app.core.config import get_settings
 
 password_hash = PasswordHash.recommended()
+logger = logging.getLogger(__name__)
+
+ADMIN_COOKIE_NAME = "fazoeeco_admin_token"
+_redis_client: Any = None
 
 
 def hash_password(plain_password: str) -> str:
@@ -150,6 +155,55 @@ def get_rate_limiter() -> InMemoryRateLimiter:
     return _rate_limiter
 
 
+async def _shared_hit(key: str, *, limit: int, window_seconds: int) -> tuple[bool, int] | None:
+    """Fixed-window counter in Redis. Returns None when Redis is not configured or down."""
+    global _redis_client
+    settings = get_settings()
+    if not settings.redis_url:
+        return None
+    try:
+        from redis.asyncio import Redis
+
+        if _redis_client is None:
+            _redis_client = Redis.from_url(settings.redis_url, decode_responses=True)
+        bucket = int(time.time()) // window_seconds
+        redis_key = f"rl:{key}:{bucket}"
+        count = int(await _redis_client.incr(redis_key))
+        if count == 1:
+            await _redis_client.expire(redis_key, window_seconds)
+        if count > limit:
+            ttl = int(await _redis_client.ttl(redis_key))
+            return False, max(1, ttl)
+        return True, 0
+    except Exception:
+        logger.warning("redis rate limit unavailable; using in-memory fallback", exc_info=True)
+        return None
+
+
+async def consume_rate_limit(key: str, *, limit: int, window_seconds: int) -> tuple[bool, int]:
+    shared = await _shared_hit(key, limit=limit, window_seconds=window_seconds)
+    if shared is not None:
+        return shared
+    return get_rate_limiter().hit(key, limit=limit, window_seconds=window_seconds)
+
+
+def set_auth_cookie(response: Response, token: str, *, secure: bool, max_age: int) -> None:
+    """Store the JWT in an HttpOnly cookie so page scripts cannot read it."""
+    response.set_cookie(
+        key=ADMIN_COOKIE_NAME,
+        value=token,
+        max_age=max_age,
+        httponly=True,
+        secure=secure,
+        samesite="lax",
+        path="/",
+    )
+
+
+def clear_auth_cookie(response: Response) -> None:
+    response.delete_cookie(ADMIN_COOKIE_NAME, path="/")
+
+
 def client_identity(request: Request) -> str:
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
@@ -203,14 +257,17 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if request.method.upper() == "POST" and path == self.LOGIN_PATH.rstrip("/"):
             scope = "login"
             rule = settings.rate_limit_login
-        elif request.method.upper() == "GET" and path == self.SEARCH_PATH.rstrip("/"):
+        elif request.method.upper() == "GET" and path in {
+            self.SEARCH_PATH.rstrip("/"),
+            "/api/v1/offers/home",
+        }:
             scope = "search"
             rule = settings.rate_limit_search
 
         if scope and rule:
             limit, window = parse_rate_rule(rule)
             identity = client_identity(request)
-            allowed, retry_after = get_rate_limiter().hit(
+            allowed, retry_after = await consume_rate_limit(
                 f"{scope}:{identity}",
                 limit=limit,
                 window_seconds=window,

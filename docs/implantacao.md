@@ -96,7 +96,8 @@ docker compose -f infra/compose.prod.yaml exec -T db \
 
 ## 7. Recursos na VPS 2GB
 
-- `WEB_CONCURRENCY=2` (backend)
+- `WEB_CONCURRENCY=2` na API e um container `worker` separado (`python -m app.worker`) para o APScheduler
+- Redis Alpine (32 MB) para o rate limit compartilhado
 - Sem `--reload` / sem bind mounts
 - Postgres Alpine + Nginx Alpine
 - Evite rodar Swagger/devtools em produção (`APP_ENV=production`)

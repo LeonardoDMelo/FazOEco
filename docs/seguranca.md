@@ -8,6 +8,7 @@
 - Senhas com `pwdlib` (Argon2)
 - JWT HS256 (`SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`)
 - Rotas `/api/v1/admin/*` exigem usuário ativo + `is_superuser`
+- O login também grava o JWT em cookie `HttpOnly` (`fazoeeco_admin_token`). O painel não guarda o token no `localStorage`. Clientes de API continuam podendo usar `Authorization: Bearer`.
 
 ### 2. Rate limiting
 
@@ -18,9 +19,9 @@ Middleware `RateLimitMiddleware` (`app.core.security`):
 | login | `POST /api/v1/auth/login` | `10/minute` |
 | search | `GET /api/v1/offers` | `120/minute` |
 
-Variáveis: `RATE_LIMIT_ENABLED`, `RATE_LIMIT_LOGIN`, `RATE_LIMIT_SEARCH`.
+Variáveis: `RATE_LIMIT_ENABLED`, `RATE_LIMIT_LOGIN`, `RATE_LIMIT_SEARCH`, `REDIS_URL`.
 
-Em produção o Nginx reforça com `limit_req` (ver `infra/nginx.conf`).
+Com `REDIS_URL`, o contador é compartilhado entre workers. Sem Redis, cada processo usa memória local. O Nginx reforça com `limit_req` (ver `infra/nginx.conf`).
 
 ### 3. Security headers
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { ProductImage } from "@/components/offers/ProductImage";
 import { notFound } from "next/navigation";
 import { AlertTriangle, ExternalLink, ShieldCheck, Star } from "lucide-react";
 import { OfferGrid } from "@/components/offers/OfferGrid";
@@ -98,21 +98,13 @@ export default async function OfferDetailPage({ params }: Props) {
 
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="relative aspect-square overflow-hidden rounded-3xl bg-slate-100 lg:aspect-[4/3]">
-          {offer.product_image_url ? (
-            <Image
-              src={offer.product_image_url}
-              alt={offer.product_name}
-              fill
-              className={`object-cover ${expired ? "opacity-70 grayscale" : ""}`}
-              sizes="(max-width:1024px) 100vw, 50vw"
-              unoptimized
-              priority
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-slate-400">
-              Sem imagem
-            </div>
-          )}
+          <ProductImage
+            src={offer.product_image_url}
+            alt={offer.product_name}
+            sizes="(max-width:1024px) 100vw, 50vw"
+            priority
+            className={expired ? "opacity-70 grayscale" : ""}
+          />
         </div>
 
         <div className="flex flex-col gap-5">

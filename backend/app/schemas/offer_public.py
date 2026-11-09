@@ -67,6 +67,13 @@ class OfferAdminUpdate(OfferUpdate):
     )
 
 
+class HomeShowcase(ORMModel):
+    """Single payload for the public home: ranking plus discount tiers."""
+
+    ranking: list[OfferListItem]
+    tiers: dict[str, list[OfferListItem]]
+
+
 class ProductDetail(ORMModel):
     id: UUID
     name: str

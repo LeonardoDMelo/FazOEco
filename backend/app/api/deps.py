@@ -5,23 +5,42 @@ from __future__ import annotations
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.security import decode_access_token
+from app.core.security import ADMIN_COOKIE_NAME, decode_access_token
 from app.models.user import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
-TokenStr = Annotated[str, Depends(oauth2_scheme)]
 
 
-async def get_current_user(db: DbSession, token: TokenStr) -> User:
+async def get_access_token(
+    request: Request,
+    bearer: Annotated[str | None, Depends(oauth2_scheme)],
+) -> str:
+    """Prefer Authorization Bearer; fall back to the HttpOnly admin cookie."""
+    if bearer:
+        return bearer
+    cookie = request.cookies.get(ADMIN_COOKIE_NAME)
+    if cookie:
+        return cookie
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+async def get_current_user(
+    db: DbSession,
+    token: Annotated[str, Depends(get_access_token)],
+) -> User:
     """Resolve the authenticated user from a Bearer JWT."""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

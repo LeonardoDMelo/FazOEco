@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ProductImage } from "@/components/offers/ProductImage";
 import { ExternalLink, Star } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -20,20 +20,12 @@ export function OfferCard({ offer }: { offer: OfferListItem }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/80">
       <Link href={`/ofertas/${offer.id}`} className="relative block aspect-[4/3] bg-slate-100">
-        {image ? (
-          <Image
-            src={image}
-            alt={offer.product_name}
-            fill
-            className="object-cover transition duration-500 group-hover:scale-[1.03]"
-            sizes="(max-width:768px) 100vw, 33vw"
-            unoptimized
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand-50 to-slate-100 text-sm font-medium text-slate-400">
-            Sem imagem
-          </div>
-        )}
+        <ProductImage
+          src={image}
+          alt={offer.product_name}
+          sizes="(max-width:768px) 100vw, 33vw"
+          className="transition duration-500 group-hover:scale-[1.03]"
+        />
         {discount && (
           <div className="absolute left-3 top-3">
             <Badge variant="discount" className="text-sm shadow">

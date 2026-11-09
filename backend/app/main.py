@@ -17,13 +17,18 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     from app.core.bootstrap import ensure_initial_admin
     from app.scheduler.manager import get_scheduler_manager
 
+    from app.core.config import get_settings
+
     await ensure_initial_admin()
+    settings = get_settings()
     scheduler = get_scheduler_manager()
-    scheduler.start()
+    if settings.run_scheduler:
+        scheduler.start()
     try:
         yield
     finally:
-        scheduler.shutdown()
+        if settings.run_scheduler:
+            scheduler.shutdown()
 
 
 def create_app() -> FastAPI:

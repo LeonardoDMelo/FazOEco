@@ -8,14 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  clearToken,
-  fetchMe,
-  getToken,
-  loginRequest,
-  setToken,
-  type AdminUser,
-} from "@/lib/auth";
+import { fetchMe, loginRequest, logoutRequest, type AdminUser } from "@/lib/auth";
 
 type AuthContextValue = {
   user: AdminUser | null;
@@ -32,22 +25,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
     try {
-      const me = await fetchMe(token);
+      const me = await fetchMe();
+      setUser(me.is_superuser ? me : null);
       if (!me.is_superuser) {
-        clearToken();
-        setUser(null);
-      } else {
-        setUser(me);
+        await logoutRequest();
       }
     } catch {
-      clearToken();
       setUser(null);
     } finally {
       setLoading(false);
@@ -59,20 +43,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   const login = useCallback(async (username: string, password: string) => {
-    const token = await loginRequest(username, password);
-    setToken(token);
-    const me = await fetchMe(token);
+    await loginRequest(username, password);
+    const me = await fetchMe();
     if (!me.is_superuser) {
-      clearToken();
+      await logoutRequest();
       throw new Error("Conta sem privilégios de administrador.");
     }
     setUser(me);
   }, []);
 
   const logout = useCallback(() => {
-    clearToken();
-    setUser(null);
-    window.location.href = "/admin/login";
+    void logoutRequest().finally(() => {
+      setUser(null);
+      window.location.href = "/admin/login";
+    });
   }, []);
 
   const value = useMemo(

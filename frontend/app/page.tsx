@@ -4,14 +4,10 @@ import { ArrowRight } from "lucide-react";
 import { DiscountTierSection } from "@/components/offers/DiscountTierSection";
 import { OfferGrid } from "@/components/offers/OfferGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ApiStatus } from "@/components/ui/ApiStatus";
 import { Button } from "@/components/ui/Button";
-import { getFeaturedOffers, getOffers } from "@/lib/api";
-import {
-  buildPageMetadata,
-  homeJsonLd,
-  itemListJsonLd,
-} from "@/lib/seo";
-import type { DiscountBand, OfferListItem } from "@/lib/types";
+import { loadHomeShowcase } from "@/lib/api";
+import { buildPageMetadata, homeJsonLd, itemListJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -22,29 +18,9 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/",
 });
 
-async function loadTier(): Promise<Partial<Record<DiscountBand, OfferListItem[]>>> {
-  const bands: DiscountBand[] = ["extreme", "high", "medium"];
-  const entries = await Promise.all(
-    bands.map(async (band) => {
-      const page = await getOffers({
-        band,
-        sort: "discount_desc",
-        page_size: 4,
-      });
-      return [band, page.items] as const;
-    }),
-  );
-  return Object.fromEntries(entries);
-}
-
 export default async function HomePage() {
-  const [ranking, tiers] = await Promise.all([
-    getOffers({ sort: "ranking_desc", page_size: 8 }),
-    loadTier(),
-  ]);
-  const highlightOffers = ranking.items.length
-    ? ranking.items
-    : (await getFeaturedOffers("high", 4)).items;
+  const showcase = await loadHomeShowcase();
+  const highlightOffers = showcase.data.ranking;
 
   return (
     <>
@@ -65,7 +41,7 @@ export default async function HomePage() {
           className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.25),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(134,239,172,0.2),transparent_30%)]"
         />
         <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-4 py-20 text-white">
-          <p className="animate-fade-up text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">
+          <p className="animate-fade-up text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">
             Portal de ofertas inteligentes
           </p>
           <h1 className="animate-fade-up-delay mt-4 max-w-3xl text-5xl font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl">
@@ -95,6 +71,7 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-6xl space-y-16 px-4 py-14">
+        <ApiStatus unavailable={showcase.unavailable} />
         <section>
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
@@ -118,7 +95,7 @@ export default async function HomePage() {
           />
         </section>
 
-        <DiscountTierSection tiers={tiers} />
+        <DiscountTierSection tiers={showcase.data.tiers} />
       </div>
     </>
   );

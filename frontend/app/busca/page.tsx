@@ -4,7 +4,8 @@ import { OfferFilters } from "@/components/filters/OfferFilters";
 import { SortSelector } from "@/components/filters/SortSelector";
 import { OfferGrid } from "@/components/offers/OfferGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getOffers } from "@/lib/api";
+import { ApiStatus } from "@/components/ui/ApiStatus";
+import { loadOffers } from "@/lib/api";
 import { buildPageMetadata, itemListJsonLd } from "@/lib/seo";
 import type { OfferSort } from "@/lib/types";
 
@@ -55,7 +56,7 @@ export default async function SearchPage({
   const sort = (searchParams.sort as OfferSort) || "newest";
   const page = Number(searchParams.page || "1") || 1;
 
-  const results = await getOffers({
+  const loaded = await loadOffers({
     q: searchParams.q,
     store: searchParams.store,
     band: searchParams.band,
@@ -68,6 +69,7 @@ export default async function SearchPage({
     page,
     page_size: 24,
   });
+  const results = loaded.data;
 
   const listName = searchParams.q
     ? `Resultados para ${searchParams.q}`
@@ -76,6 +78,8 @@ export default async function SearchPage({
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <JsonLd data={itemListJsonLd(results.items, listName)} />
+
+      <ApiStatus unavailable={loaded.unavailable} />
 
       <div className="mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">

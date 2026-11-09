@@ -50,6 +50,8 @@ class Settings(BaseSettings):
         alias="SSRF_ALLOWED_HOSTS",
     )
     web_concurrency: int = Field(default=2, alias="WEB_CONCURRENCY")
+    run_scheduler: bool = Field(default=True, alias="RUN_SCHEDULER")
+    redis_url: str | None = Field(default=None, alias="REDIS_URL")
     admin_initial_email: str = Field(
         default="admin@fazoeeco.local",
         alias="ADMIN_INITIAL_EMAIL",

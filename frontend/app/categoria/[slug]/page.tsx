@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { OfferGrid } from "@/components/offers/OfferGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getCategories, getCategory, getOffers } from "@/lib/api";
+import { ApiStatus } from "@/components/ui/ApiStatus";
+import { getCategories, getCategory, loadCategory, loadOffers } from "@/lib/api";
 import {
   breadcrumbJsonLd,
   buildPageMetadata,
@@ -40,14 +41,23 @@ export async function generateStaticParams() {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const category = await getCategory(params.slug);
+  const loadedCategory = await loadCategory(params.slug);
+  if (loadedCategory.unavailable) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <ApiStatus unavailable />
+      </div>
+    );
+  }
+  const category = loadedCategory.data;
   if (!category) notFound();
 
-  const offers = await getOffers({
+  const loadedOffers = await loadOffers({
     category_id: category.id,
     sort: "ranking_desc",
     page_size: 24,
   });
+  const offers = loadedOffers.data;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -71,6 +81,7 @@ export default async function CategoryPage({ params }: Props) {
       {category.description && (
         <p className="mt-3 max-w-2xl text-slate-600">{category.description}</p>
       )}
+      <ApiStatus unavailable={loadedOffers.unavailable} />
       <p className="mt-2 text-sm text-slate-500">
         {offers.meta.total} oferta{offers.meta.total === 1 ? "" : "s"} encontrada
         {offers.meta.total === 1 ? "" : "s"}

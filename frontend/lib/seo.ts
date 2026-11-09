@@ -29,7 +29,7 @@ export function buildPageMetadata({
   noIndex?: boolean;
 }): Metadata {
   const url = absoluteUrl(path);
-  const ogImage = image || absoluteUrl("/og-default.png");
+  const ogImage = image || absoluteUrl("/og-default.jpg");
 
   return {
     title,
