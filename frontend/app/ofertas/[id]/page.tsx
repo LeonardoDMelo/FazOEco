@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, ShieldCheck, Star } from "lucide-react";
+import { AlertTriangle, ExternalLink, ShieldCheck, Star } from "lucide-react";
+import { OfferGrid } from "@/components/offers/OfferGrid";
 import { PriceHistoryChart } from "@/components/offers/PriceHistoryChart";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { getOffer } from "@/lib/api";
+import { getOffer, getOfferAlternatives } from "@/lib/api";
 import {
   formatBRL,
   formatDateTimeSP,
@@ -14,6 +16,12 @@ import {
   formatRating,
   toNumber,
 } from "@/lib/formatters";
+import {
+  breadcrumbJsonLd,
+  buildPageMetadata,
+  offerMetaDescription,
+  offerProductJsonLd,
+} from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -21,11 +29,23 @@ type Props = { params: { id: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const offer = await getOffer(params.id);
-  if (!offer) return { title: "Oferta não encontrada" };
-  return {
-    title: offer.product_name,
-    description: `Oferta ${offer.store_name}: ${offer.product_name} por ${formatBRL(offer.current_price)}`,
-  };
+  if (!offer) {
+    return buildPageMetadata({
+      title: "Oferta não encontrada",
+      description: "A oferta solicitada não está disponível no FazOEco.",
+      path: `/ofertas/${params.id}`,
+      noIndex: true,
+    });
+  }
+
+  return buildPageMetadata({
+    title: offer.is_available
+      ? `${offer.product_name} — ${formatBRL(offer.current_price)}`
+      : `${offer.product_name} (oferta encerrada)`,
+    description: offerMetaDescription(offer),
+    path: `/ofertas/${offer.id}`,
+    image: offer.product_image_url,
+  });
 }
 
 export default async function OfferDetailPage({ params }: Props) {
@@ -33,9 +53,24 @@ export default async function OfferDetailPage({ params }: Props) {
   if (!offer) notFound();
 
   const discount = formatDiscount(offer.discount_percent);
+  const expired = !offer.is_available;
+  const alternatives = expired
+    ? await getOfferAlternatives(offer.id, 8)
+    : { items: [], meta: { page: 1, page_size: 8, total: 0, pages: 0 } };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
+      <JsonLd
+        data={[
+          offerProductJsonLd(offer),
+          breadcrumbJsonLd([
+            { name: "Início", path: "/" },
+            { name: "Ofertas", path: "/busca" },
+            { name: offer.product_name, path: `/ofertas/${offer.id}` },
+          ]),
+        ]}
+      />
+
       <div className="mb-6 text-sm text-slate-500">
         <Link href="/" className="hover:text-brand-700">
           Início
@@ -48,6 +83,19 @@ export default async function OfferDetailPage({ params }: Props) {
         <span className="text-slate-800">{offer.product_name}</span>
       </div>
 
+      {expired && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-4 text-amber-950">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+          <div>
+            <p className="font-semibold">Esta oferta foi encerrada</p>
+            <p className="mt-1 text-sm text-amber-900/90">
+              O preço ou a disponibilidade mudaram na loja. Mantemos a página
+              para referência e sugerimos alternativas da mesma categoria abaixo.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="relative aspect-square overflow-hidden rounded-3xl bg-slate-100 lg:aspect-[4/3]">
           {offer.product_image_url ? (
@@ -55,7 +103,7 @@ export default async function OfferDetailPage({ params }: Props) {
               src={offer.product_image_url}
               alt={offer.product_name}
               fill
-              className="object-cover"
+              className={`object-cover ${expired ? "opacity-70 grayscale" : ""}`}
               sizes="(max-width:1024px) 100vw, 50vw"
               unoptimized
               priority
@@ -70,7 +118,11 @@ export default async function OfferDetailPage({ params }: Props) {
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap gap-2">
             <Badge variant="neutral">{offer.store_name}</Badge>
-            {discount && <Badge variant="discount">{discount}</Badge>}
+            {expired ? (
+              <Badge variant="warning">Encerrada</Badge>
+            ) : (
+              discount && <Badge variant="discount">{discount}</Badge>
+            )}
             {offer.brand && <Badge variant="brand">{offer.brand}</Badge>}
           </div>
 
@@ -97,14 +149,23 @@ export default async function OfferDetailPage({ params }: Props) {
               {formatBRL(offer.current_price)}
             </p>
             <p className="mt-2 text-sm text-slate-500">
-              Preço verificado em {formatDateTimeSP(offer.last_checked_at || offer.updated_at || offer.created_at)}
+              Preço verificado em{" "}
+              {formatDateTimeSP(
+                offer.last_checked_at || offer.updated_at || offer.created_at,
+              )}
             </p>
           </div>
 
-          <Button href={offer.affiliate_url} external variant="store" className="text-base">
-            Ir para {offer.store_name}
-            <ExternalLink className="h-4 w-4" />
-          </Button>
+          {!expired ? (
+            <Button href={offer.affiliate_url} external variant="store" className="text-base">
+              Ir para {offer.store_name}
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button href="/busca?sort=ranking_desc" variant="primary" className="justify-center">
+              Ver ofertas ativas
+            </Button>
+          )}
 
           <div className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
@@ -147,6 +208,23 @@ export default async function OfferDetailPage({ params }: Props) {
           </ul>
         </div>
       </div>
+
+      {expired && (
+        <section className="mt-12">
+          <h2 className="text-2xl font-bold text-slate-900">
+            Alternativas na mesma categoria
+          </h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Selecionamos ofertas ativas parecidas para você continuar comparando.
+          </p>
+          <div className="mt-6">
+            <OfferGrid
+              offers={alternatives.items}
+              emptyMessage="Não encontramos alternativas ativas no momento."
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

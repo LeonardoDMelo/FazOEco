@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { OfferFilters } from "@/components/filters/OfferFilters";
 import { SortSelector } from "@/components/filters/SortSelector";
 import { OfferGrid } from "@/components/offers/OfferGrid";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getOffers } from "@/lib/api";
+import { buildPageMetadata, itemListJsonLd } from "@/lib/seo";
 import type { OfferSort } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +20,32 @@ type SearchParams = {
   page?: string;
   category_id?: string;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const q = searchParams.q?.trim();
+  const title = q ? `Busca: ${q}` : "Buscar ofertas";
+  const description = q
+    ? `Resultados de ofertas para “${q}” no FazOEco.`
+    : "Filtre ofertas por loja, faixa de desconto, preço e ranking no FazOEco.";
+
+  const params = new URLSearchParams();
+  Object.entries(searchParams).forEach(([key, value]) => {
+    if (value) params.set(key, value);
+  });
+  const qs = params.toString();
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: qs ? `/busca?${qs}` : "/busca",
+    // Search result pages with query are better as noindex to avoid thin duplicates
+    noIndex: Boolean(q),
+  });
+}
 
 export default async function SearchPage({
   searchParams,
@@ -40,8 +69,14 @@ export default async function SearchPage({
     page_size: 24,
   });
 
+  const listName = searchParams.q
+    ? `Resultados para ${searchParams.q}`
+    : "Todas as ofertas FazOEco";
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
+      <JsonLd data={itemListJsonLd(results.items, listName)} />
+
       <div className="mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">
           Busca

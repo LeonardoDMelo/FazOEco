@@ -1,12 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { DiscountTierSection } from "@/components/offers/DiscountTierSection";
 import { OfferGrid } from "@/components/offers/OfferGrid";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/Button";
 import { getFeaturedOffers, getOffers } from "@/lib/api";
+import {
+  buildPageMetadata,
+  homeJsonLd,
+  itemListJsonLd,
+} from "@/lib/seo";
 import type { DiscountBand, OfferListItem } from "@/lib/types";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Ofertas e Afiliados com Transparência",
+  description:
+    "Compare descontos reais com ranking de qualidade, faixas dinâmicas e links de afiliados transparentes no FazOEco.",
+  path: "/",
+});
 
 async function loadTier(): Promise<Partial<Record<DiscountBand, OfferListItem[]>>> {
   const bands: DiscountBand[] = ["extreme", "high", "medium"];
@@ -29,9 +43,17 @@ export default async function HomePage() {
     loadTier(),
   ]);
   const featured = await getFeaturedOffers("high", 4);
+  const highlightOffers = ranking.items.length ? ranking.items : featured.items;
 
   return (
     <>
+      <JsonLd
+        data={[
+          homeJsonLd(),
+          itemListJsonLd(highlightOffers, "Destaques do ranking FazOEco"),
+        ]}
+      />
+
       <section className="relative overflow-hidden border-b border-brand-900/10">
         <div
           aria-hidden
@@ -53,7 +75,10 @@ export default async function HomePage() {
             transparência — para você clicar com confiança.
           </p>
           <div className="animate-fade-up-delay-2 mt-8 flex flex-wrap gap-3">
-            <Button href="/busca?sort=discount_desc" className="bg-white text-brand-800 hover:bg-emerald-50">
+            <Button
+              href="/busca?sort=discount_desc"
+              className="bg-white text-brand-800 hover:bg-emerald-50"
+            >
               Ver ofertas em alta
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -87,7 +112,7 @@ export default async function HomePage() {
             </Link>
           </div>
           <OfferGrid
-            offers={ranking.items.length ? ranking.items : featured.items}
+            offers={highlightOffers}
             emptyMessage="Ainda não há ofertas aprovadas. Em breve novos descontos aparecerão aqui."
           />
         </section>

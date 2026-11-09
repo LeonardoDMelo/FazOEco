@@ -94,6 +94,19 @@ export async function getOffer(id: string): Promise<OfferDetail | null> {
   }
 }
 
+export async function getOfferAlternatives(
+  id: string,
+  pageSize = 8,
+): Promise<Page<OfferListItem>> {
+  try {
+    return await apiFetch<Page<OfferListItem>>(
+      `/api/v1/offers/${id}/alternatives?page_size=${pageSize}`,
+    );
+  } catch {
+    return emptyPage();
+  }
+}
+
 export async function getProduct(id: string): Promise<ProductDetail | null> {
   try {
     return await apiFetch<ProductDetail>(`/api/v1/products/${id}`);

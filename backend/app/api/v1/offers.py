@@ -75,10 +75,19 @@ async def featured_offers(
 
 @router.get("/offers/{offer_id}", response_model=OfferDetail)
 async def get_offer(offer_id: UUID, db: DbSession) -> OfferDetail:
-    """Detalhe público de uma oferta aprovada."""
+    """
+    Detalhe público de oferta aprovada.
+
+    Ofertas expiradas/indisponíveis continuam acessíveis (SEO orgânico),
+    desde que tenham sido aprovadas anteriormente.
+    """
     stmt = (
-        base_offer_query(public_only=True)
-        .where(Offer.id == offer_id)
+        base_offer_query(public_only=False)
+        .where(
+            Offer.id == offer_id,
+            Offer.approval_status == "approved",
+            Product.is_active.is_(True),
+        )
     )
     offer = (await db.execute(stmt)).scalars().unique().first()
     if offer is None:
@@ -99,6 +108,29 @@ async def get_offer(offer_id: UUID, db: DbSession) -> OfferDetail:
         reviews_count=product.reviews_count,
         sales_count=product.sales_count,
     )
+
+
+@router.get("/offers/{offer_id}/alternatives", response_model=Page[OfferListItem])
+async def offer_alternatives(
+    offer_id: UUID,
+    db: DbSession,
+    page_size: int = Query(default=8, ge=1, le=24),
+) -> Page[OfferListItem]:
+    """Sugestões ativas da mesma categoria (para páginas de oferta expirada)."""
+    stmt = (
+        base_offer_query(public_only=False)
+        .where(Offer.id == offer_id, Offer.approval_status == "approved")
+    )
+    offer = (await db.execute(stmt)).scalars().unique().first()
+    if offer is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Offer not found")
+
+    related = base_offer_query(public_only=True).where(
+        Product.category_id == offer.product.category_id,
+        Offer.id != offer_id,
+    )
+    related = apply_sort(related, "ranking_desc")
+    return await paginate_offers(db, related, page=1, page_size=page_size)
 
 
 @router.get("/products/{product_id}", response_model=ProductDetail)

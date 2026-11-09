@@ -67,7 +67,7 @@ npm run dev
 
 ## Fase atual
 
-**Fase 8** — APScheduler: ingestão periódica, revalidação/expiração e disparo manual de jobs.
+**Fase 9** — SEO dinâmico, JSON-LD (Product/AggregateOffer), sitemap.xml e robots.txt.
 
 ### Admin
 
