@@ -67,7 +67,7 @@ npm run dev
 
 ## Fase atual
 
-**Fase 4** — Conectores Amazon / Mercado Livre / Shopee com modo simulação (`ENABLE_SIMULATION_MODE`).
+**Fase 5** — API REST pública + painel admin (JWT), ofertas, categorias, conectores e configs.
 
 ### Domínio (tabelas)
 

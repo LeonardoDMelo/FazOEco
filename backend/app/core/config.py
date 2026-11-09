@@ -35,6 +35,11 @@ class Settings(BaseSettings):
         alias="BACKEND_CORS_ORIGINS",
     )
     secret_key: str = Field(default="change-me", alias="SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(
+        default=60 * 24,
+        alias="ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
     display_timezone: str = Field(
         default="America/Sao_Paulo",
         alias="DISPLAY_TIMEZONE",

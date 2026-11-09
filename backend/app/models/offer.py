@@ -75,6 +75,14 @@ class Offer(Base):
     commission_rate: Mapped[Decimal | None] = mapped_column(Numeric(5, 2), nullable=True)
 
     is_available: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    # pending | approved | rejected
+    approval_status: Mapped[str] = mapped_column(
+        String(20),
+        default="pending",
+        server_default="pending",
+        nullable=False,
+        index=True,
+    )
     clicks_count: Mapped[int] = mapped_column(
         Integer, default=0, server_default="0", nullable=False
     )

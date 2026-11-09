@@ -24,6 +24,7 @@ class OfferBase(ORMModel):
     discount_percent: Decimal | None = Field(default=None, ge=0, le=100)
     commission_rate: Decimal | None = Field(default=None, ge=0, le=100)
     is_available: bool = True
+    approval_status: str = Field(default="pending", pattern="^(pending|approved|rejected)$")
 
     @field_validator("currency")
     @classmethod
@@ -46,6 +47,9 @@ class OfferUpdate(ORMModel):
     discount_percent: Decimal | None = Field(default=None, ge=0, le=100)
     commission_rate: Decimal | None = Field(default=None, ge=0, le=100)
     is_available: bool | None = None
+    approval_status: str | None = Field(
+        default=None, pattern="^(pending|approved|rejected)$"
+    )
     last_checked_at: datetime | None = None
 
     @field_validator("currency")
